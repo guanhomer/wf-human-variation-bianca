@@ -52,7 +52,7 @@ def add_run_IDs_and_basecall_models_to_meta(ch, boolean allow_multiple_basecall_
     // HashSet for all observed run_ids
     Set<String> ingressed_run_ids = new HashSet<String>()
 
-    // extract run_ids from fastcat stats / bamstats results and add to metadata as well
+    // extract run_ids from fast stats / bamstats results and add to metadata as well
     // as `ingressed_run_ids`
     ch = ch | map { meta, reads, stats ->
         if (stats) {
@@ -696,7 +696,8 @@ process catSortBams {
     label "ingress"
     label "wf_common"
     cpus 4
-    memory "4 GB"
+    memory "8 GB"
+    time "4h"
     input: tuple val(meta), path("input_bams/reads*.bam")
     output: tuple val(meta), path("reads.bam"), path("reads.bam.bai")
     script:
