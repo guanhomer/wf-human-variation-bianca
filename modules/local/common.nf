@@ -456,7 +456,7 @@ process annotate_vcf {
         fi
 
         # Revert back chrMT to chrM
-        snpEff -XX:ActiveProcessorCount=!{task.cpus} -Xmx!{task.memory.giga - 1}g ann -noStats -noLog $snpeff_db ${INPUT_FILENAME} | sed 's/^chrMT\\t/chrM\\t/' > !{xam_meta.alias}.intermediate.snpeff_annotated.vcf
+        snpEff -XX:ActiveProcessorCount=!{task.cpus} -Xmx!{task.memory.giga - 1}g ann -noStats -noLog -dataDir "$SNPEFF_DATA" -noDownload $snpeff_db ${INPUT_FILENAME} | sed 's/^chrMT\\t/chrM\\t/' > !{xam_meta.alias}.intermediate.snpeff_annotated.vcf
 
         # Add ClinVar annotations
         SnpSift -XX:ActiveProcessorCount=!{task.cpus} annotate $clinvar_vcf !{xam_meta.alias}.intermediate.snpeff_annotated.vcf | bgzip > !{xam_meta.alias}.wf_${OUTPUT_LABEL}.vcf.gz
