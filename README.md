@@ -1,7 +1,16 @@
 # Nanopore Human Variation Workflow on Bianca (UPPMAX)
 
-This repository contains configuration and notes for running the Nanopore human variation workflow on the **Bianca** cluster at **UPPMAX**.  
-Bianca does not allow outbound internet, so some workflow steps (e.g. snpEff annotations) require local database access.
+This repository contains the preparation and configuration files needed to run the Nanopore human variation workflow on the **Bianca** cluster at **UPPMAX**.
+
+It includes:
+
+A script `download_singularity_images.sh` to download and prepare the required Singularity images.
+
+A modified `uppmax.config` for resource settings and SLURM integration.
+
+An example script `run_workflow.sh` for launching the workflow with appropriate parameters.
+
+Because Bianca does not allow outbound internet access, this configuration also handles steps that would otherwise attempt online downloads (e.g. snpEff annotations), by pointing the workflow to a local preinstalled snpEff database.
 
 ---
 
