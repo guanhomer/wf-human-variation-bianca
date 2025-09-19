@@ -113,11 +113,33 @@ We can run the `download_singularity_images.sh` script on Transit to download th
 
 # Run the workflow
 
+To launch the workflow:
+
    ```bash
    bash run_workflow.sh
    ```
 
+Adjust the input arguments based on your project:
 
+`--bam` : directory containing aligned BAM files.
+
+`--ref` : reference genome FASTA.
+
+`--sample_name` : label for this run (used in output names).
+
+`--snp --sv --mod --phased` : enable SNP calling, structural variant calling, methylation, and phasing.
+
+`--snpeff_data` : path to the local snpEff database (preinstalled via module).
+
+`-profile singularity` : run using Singularity containers.
+
+`--threads` : number of threads for lightweight tasks (SLURM allocation is handled by config).
+
+`-c $CUSTOM_CONFIG` : use the UPPMAX config for SLURM resource settings and snpEff binding.
+
+`--project` : your UPPMAX project ID.
+
+`-resume` : reuse results from previous runs when possible.
 
 
 
