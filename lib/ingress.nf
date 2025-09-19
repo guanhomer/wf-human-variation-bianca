@@ -697,7 +697,6 @@ process catSortBams {
     label "wf_common"
     cpus 4
     memory "8 GB"
-    time "4h"
     input: tuple val(meta), path("input_bams/reads*.bam")
     output: tuple val(meta), path("reads.bam"), path("reads.bam.bai")
     script:
