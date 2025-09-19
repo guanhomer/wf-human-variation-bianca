@@ -92,6 +92,22 @@ We can run the `download_singularity_images.sh` script on Transit to download th
       withName: 'infer_sex' {
         executor = 'local'
       }
+
+      withName: 'add_snp_tools_to_versions' {
+        executor = 'local'
+      }
+
+      withName: 'getParams' {
+        executor = 'local'
+      }
+
+      withName: 'output_sv' {
+        executor = 'local'
+      }
+
+      withName: 'output_snp' {
+        executor = 'local'
+      }
   }
   ```
 
