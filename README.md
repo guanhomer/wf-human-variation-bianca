@@ -58,14 +58,40 @@ We can run the `download_singularity_images.sh` script on Transit to download th
 
 ## 2. Tune resources per process
 
-- Adjust `cpus`, `memory`, and `time` in `modules/local/common.nf`.  
+- Adjust `cpus`, `memory`, and `time` in `uppmax.config` or `modules/local/common.nf`.  
 - Scale resources with `task.attempt` for heavier steps.  
 - Check `execution/trace.txt` after runs to refine resource settings.  
 - Run small/lightweight steps locally to avoid SLURM overhead. For example:
 
   ```groovy
-  process publish_artifact {
-    executor 'local'
+  process {
+      withName: 'mosdepth' {
+        time = '4h'
+      }
+      
+      withName: 'catSortBams' {
+        time = '4h'
+      }
+
+      withName: 'publish_artifact' {
+        executor = 'local'
+      }
+
+      withName: 'getAllChromosomesBed' {
+        executor = 'local'
+      }
+
+      withName: 'getVersions' {
+        executor = 'local'
+      }
+
+      withName: 'output_cnv' {
+        executor = 'local'
+      }
+
+      withName: 'infer_sex' {
+        executor = 'local'
+      }
   }
   ```
 
