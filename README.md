@@ -108,6 +108,18 @@ We can run the `download_singularity_images.sh` script on Transit to download th
       withName: 'output_snp' {
         executor = 'local'
       }
+
+      withName: 'annotate_snp_vcf' {
+        cpus = 4
+        memory = '8 GB'
+        time = "10m"
+      }
+
+      withName: 'annotate_sv_vcf' {
+        cpus = 4
+        memory = '8 GB'
+        time = '10m'
+      }
   }
   ```
 
