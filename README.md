@@ -4,11 +4,11 @@ This repository contains the preparation and configuration files needed to run t
 
 It includes:
 
-A script `download_singularity_images.sh` to download and prepare the required Singularity images.
+- A script `download_singularity_images.sh` to download and prepare the required Singularity images.
 
-A modified `uppmax.config` for resource settings and SLURM integration.
+- A modified `uppmax.config` for resource settings and SLURM integration.
 
-An example script `run_workflow.sh` for launching the workflow with appropriate parameters.
+- An example script `run_workflow.sh` for launching the workflow with appropriate parameters.
 
 Because Bianca does not allow outbound internet access, this configuration also handles steps that would otherwise attempt online downloads (e.g. snpEff annotations), by pointing the workflow to a local preinstalled snpEff database.
 
