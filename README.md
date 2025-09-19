@@ -98,15 +98,19 @@ We can run the `download_singularity_images.sh` script on Transit to download th
    snpEff ... -dataDir "$SNPEFF_DATA" -noDownload ...
    ```
 
----
-
 ## Notes
 
 - Always request realistic SLURM walltimes (`time` in config or `#SBATCH -t`) to avoid the 1-minute default kill.  
 - Monitor resource usage with `trace.txt` and adjust process directives accordingly.  
 - For debugging snpEff, make sure the DB folder (`GRCh38.p13`, etc.) exists under the bound `$SNPEFF_DATA` path.
 
+---
 
+# Run the workflow
+
+   ```bash
+   bash run_workflow.sh
+   ```
 
 
 
