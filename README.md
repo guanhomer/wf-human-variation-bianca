@@ -5,13 +5,25 @@ Bianca does not allow outbound internet, so some workflow steps (e.g. snpEff ann
 
 ---
 
+# Preparing Singularity Images
+
+Bianca does not allow direct internet access, so Docker/Singularity images must be prepared on the **transit.uppmax.uu.se** server and then transferred via the mounted **wharf** folder that is shared between Transit and Bianca.
+
+We can run the `download_singularity_images.sh` script on Transit to download the Singularity images and move the resulting images to Bianca via the mounted Wharf folder.
+
+   The script will:
+   - Pull the required Docker images from Docker Hub (or another registry).
+   - Convert them into Singularity `.sif` images.
+
+---
+
+# Configuring the nextflow workflow for Bianca
+
 ## Summary
 
 - All processes have **safe defaults** and retry logic.  
 - Resource-hungry steps **scale automatically** with retries.  
 - Annotation steps use the **preinstalled snpEff database**, avoiding failures from lack of internet.
-
----
 
 ## 1. Use `uppmax.config` as base
 
@@ -99,11 +111,6 @@ Bianca does not allow outbound internet, so some workflow steps (e.g. snpEff ann
 
 
 
-
-
-
-
-See the [EPI2ME website](https://labs.epi2me.io/) for lots of other resources and blog posts.
 
 
 
