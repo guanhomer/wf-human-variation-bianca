@@ -51,10 +51,6 @@ We can run the `download_singularity_images.sh` script on Transit to download th
      time   = '1h'
      maxRetries = 3
      errorStrategy = { task.exitStatus in [137,140] ? 'retry' : 'finish' }
-
-     withLabel: 'snpeff_annotation' {
-       containerOptions = "--bind ${params.snpeff_data}"
-     }
    }
    ```
 
