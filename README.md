@@ -79,7 +79,7 @@ We can run the `download_singularity_images.sh` script on Transit to download th
 2. Pass the path to the workflow:
 
    ```bash
-   nextflow run main.nf --snpeff_data $SNPEFF_DATA
+   nextflow run main.nf ... --snpeff_data $SNPEFF_DATA
    ```
 
 3. In the `uppmax.config`, bind the database path for snpEff tasks:
