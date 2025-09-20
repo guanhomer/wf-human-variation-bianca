@@ -66,11 +66,11 @@ We can run the `download_singularity_images.sh` script on Transit to download th
   ```groovy
   process {
       withName: 'mosdepth' {
-        time = '4h'
+        time = '6h'
       }
       
       withName: 'catSortBams' {
-        time = '4h'
+        time = '6h'
       }
 
       withName: 'publish_artifact' {
