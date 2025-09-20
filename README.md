@@ -1,4 +1,4 @@
-# Nanopore Human Variation Workflow on Bianca (UPPMAX)
+# Nanopore Human Variation Workflow (v2.7.2) on Bianca (UPPMAX)
 
 This repository contains the preparation and configuration files needed to run the Nanopore human variation workflow on the **Bianca** cluster at **UPPMAX**.
 
