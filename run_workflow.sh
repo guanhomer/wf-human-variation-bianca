@@ -18,6 +18,7 @@ nextflow run $WORKFLOW_DIR \
  --sample_name 'BT-65_FF' \
  --snp \
  --sv \
+ --cnv \
  --mod \
  --phased \
  --snpeff_data $SNPEFF_DATA \
