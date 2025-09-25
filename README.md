@@ -40,7 +40,7 @@ We can run the `download_singularity_images.sh` script on Transit to download th
 1. Ignore parameters that aren’t relevant on Bianca by setting:
 
    ```groovy
-   schema_ignore_params = "genomes,input_paths,cluster-options,clusterOptions,project,igenomes_base,max_time,max_cpus,max_memory,save_reference,config_profile_url,config_profile_contact,config_profile_description,show_hidden_params,validate_params,monochrome_logs,min_read_support_limit,min_read_support,aws_queue,aws_image_prefix,wf,clusterOptions,project,snpeff_data"
+   schema_ignore_params = "genomes,input_paths,cluster-options,clusterOptions,project,igenomes_base,max_time,max_cpus,max_memory,save_reference,config_profile_url,config_profile_contact,config_profile_description,show_hidden_params,validate_params,monochrome_logs,min_read_support_limit,min_read_support,aws_queue,aws_image_prefix,wf,snpeff_data"
    ```
 
 2. Define baseline resources for all unset processes:
