@@ -32,7 +32,7 @@ We can run the `download_singularity_images.sh` script on Transit to download th
 
 - All processes have **safe defaults** and retry logic.  
 - Resource-hungry steps **scale automatically** with retries.
-- Automatic cleanup cache prevents excessive disk usage.
+- **Automatic cleanup cache** prevents excessive disk usage.
 - Annotation steps use the **preinstalled snpEff database**, avoiding failures from lack of internet.
 
 ## 1. Use `uppmax.config` as base
