@@ -198,7 +198,7 @@ Adjust the input arguments based on your project:
 
 `--sample_name` : label for this run (used in output names).
 
-`--snp --sv --mod --phased` : enable SNP calling, structural variant calling, methylation, and phasing.
+`--snp --sv --str --mod --phased` : enable SNP calling, structural variant calling, Short Tandem Repeats detection, methylation, and phasing.
 
 `--snpeff_data` : path to the local snpEff database (preinstalled via module).
 
