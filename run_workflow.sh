@@ -20,14 +20,15 @@ nextflow run $WORKFLOW_DIR \
  --sv \
  --cnv \
  --mod \
+ --str \
  --phased \
  --snpeff_data $SNPEFF_DATA \
  -profile singularity \
  --threads 1 \
  --override_basecaller_cfg 'dna_r10.4.1_e8.2_400bps_sup@v5.2.0' \
  -c $CUSTOM_CONFIG \
- --project sens2024549 \
- -resume
+ --project sens2024549
+# -resume # disable as cleanup is enabled in config file
 
 # Clean up
 if ls output/*.wf-human-alignment-report.html 1>/dev/null 2>&1 && \
