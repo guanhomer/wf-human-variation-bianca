@@ -31,7 +31,8 @@ We can run the `download_singularity_images.sh` script on Transit to download th
 ## Summary
 
 - All processes have **safe defaults** and retry logic.  
-- Resource-hungry steps **scale automatically** with retries.  
+- Resource-hungry steps **scale automatically** with retries.
+- Automatic cleanup cache prevents excessive disk usage.
 - Annotation steps use the **preinstalled snpEff database**, avoiding failures from lack of internet.
 
 ## 1. Use `uppmax.config` as base
@@ -54,7 +55,18 @@ We can run the `download_singularity_images.sh` script on Transit to download th
    }
    ```
 
----
+3. Enable automatic cleanup with nf-boost to prevent excessive disk usage in the work cache.
+⚠️ Note: This disables the resume feature. Comment out this section when running tests.
+
+  ```groovy
+   plugins {
+     id 'nf-boost@0.6.0'
+   }
+
+   boost {
+     cleanup = true
+   }
+  ```
 
 ## 2. Tune resources per process
 
