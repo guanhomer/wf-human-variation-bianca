@@ -64,7 +64,7 @@ We can run the `download_singularity_images.sh` script on Transit to download th
    }
 
    boost {
-     cleanup = true
+     cleanup = 'v2'
    }
   ```
 
