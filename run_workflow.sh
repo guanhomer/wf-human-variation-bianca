@@ -5,11 +5,11 @@ export NXF_SINGULARITY_CACHEDIR=/proj/nobackup/sens2024549/human-variation-workf
 export NXF_OFFLINE='true'
 export NXF_OPTS='-Xms1g -Xmx4g'
 
-export WORKFLOW_DIR=/proj/nobackup/sens2024549/human-variation-workflow/epi2me-labs/wf-human-variation
-export CUSTOM_CONFIG=/proj/nobackup/sens2024549/human-variation-workflow/epi2me-labs/wf-human-variation/uppmax.config
+WORKFLOW_DIR=/proj/nobackup/sens2024549/human-variation-workflow/epi2me-labs/wf-human-variation
+CUSTOM_CONFIG=$WORKFLOW_DIR/uppmax.config
 
-export BAM=/proj/sens2024549/nobackup/human-variation-workflow/20250919_BT-65_FF/bam/
-export REF=/proj/sens2024549/reference/GRCh38.p14.genome.fa
+BAM=/proj/sens2024549/nobackup/human-variation-workflow/20250919_BT-65_FF/bam/
+REF=/proj/sens2024549/reference/GRCh38.p14.genome.fa
 # export BED=${DATA}demo.bed
 
 nextflow run $WORKFLOW_DIR \
@@ -24,7 +24,7 @@ nextflow run $WORKFLOW_DIR \
  --phased \
  --snpeff_data $SNPEFF_DATA \
  -profile singularity \
- --threads 1 \
+ --threads 4 \
  --override_basecaller_cfg 'dna_r10.4.1_e8.2_400bps_sup@v5.2.0' \
  -c $CUSTOM_CONFIG \
  --project sens2024549
