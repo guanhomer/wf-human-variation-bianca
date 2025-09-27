@@ -35,8 +35,10 @@ nextflow run $WORKFLOW_DIR \
 # Clean up
 if ls output/*.wf-human-alignment-report.html 1>/dev/null 2>&1 && \
    ls output/*.wf-human-snp-report.html 1>/dev/null 2>&1 && \
+   ls output/*.wf-human-str-report.html 1>/dev/null 2>&1 && \
+   ls output/*.wf-human-cnv-report.html 1>/dev/null 2>&1 && \
    ls output/*.wf-human-sv-report.html 1>/dev/null 2>&1; then
-    echo "All three report types found — removing work folder..."
+    echo "All five report types found — removing work folder..."
     rm -rf work
 else
     echo "Not all reports exist — keeping work folder."
