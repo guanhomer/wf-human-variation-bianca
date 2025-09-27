@@ -8,14 +8,16 @@ export NXF_OPTS='-Xms1g -Xmx4g'
 WORKFLOW_DIR=/proj/nobackup/sens2024549/human-variation-workflow/epi2me-labs/wf-human-variation
 CUSTOM_CONFIG=$WORKFLOW_DIR/uppmax.config
 
-BAM=/proj/sens2024549/nobackup/human-variation-workflow/20250919_BT-65_FF/bam/
 REF=/proj/sens2024549/reference/GRCh38.p14.genome.fa
 # export BED=${DATA}demo.bed
+
+BAM=/proj/sens2024549/nobackup/human-variation-workflow/20250919_BT-65_FF/bam/
+SAMPLE_NAME=BT-65_FF
 
 nextflow run $WORKFLOW_DIR \
  --bam $BAM \
  --ref $REF \
- --sample_name 'BT-65_FF' \
+ --sample_name "$SAMPLE_NAME" \
  --snp \
  --sv \
  --cnv \
