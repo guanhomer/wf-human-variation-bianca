@@ -145,7 +145,7 @@ modules\local\wf-human-snp.nf
   ```groovy
   process phase_contig {
     ...
-    longphase phase ... -t "$((task.cpus - 1))"
+    longphase phase ... -t \$((task.cpus - 1))
     ...
   }
   ```
