@@ -75,6 +75,7 @@ We can run the `download_singularity_images.sh` script on Transit to download th
 - Check `execution/trace.txt` after runs to refine resource settings.  
 - Run small/lightweight steps locally to avoid SLURM overhead. For example:
 
+uppmax.config
   ```groovy
   process {
         
@@ -137,6 +138,15 @@ We can run the `download_singularity_images.sh` script on Transit to download th
         memory = '8 GB'
         time = '10m'
       }
+  }
+  ```
+
+modules\local\wf-human-snp.nf
+  ```groovy
+  process phase_contig {
+    ...
+    longphase phase ... -t "$((task.cpus - 1))"
+    ...
   }
   ```
 
