@@ -211,7 +211,7 @@ process phase_contig {
         """
         echo "Using longphase for phasing"
         longphase phase --ont -o phased_${contig} \
-            -s ${het_snps} -b ${xam} -r ${ref} -t \$((task.cpus - 1))
+            -s ${het_snps} -b ${xam} -r ${ref} -t 4
         bgzip phased_${contig}.vcf
         tabix -f -p vcf phased_${contig}.vcf.gz
         """
