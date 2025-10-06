@@ -143,9 +143,10 @@ uppmax.config
 
 modules\local\wf-human-snp.nf
   ```groovy
+  def threads = Math.max(task.cpus - 1, 1)
   process phase_contig {
     ...
-    longphase phase ... -t \$((task.cpus - 1))
+    longphase phase ... -t ${threads}
     ...
   }
   ```
