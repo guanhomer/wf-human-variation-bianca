@@ -10,7 +10,7 @@ It includes:
 
 - An example script `run_workflow.sh` for launching the workflow with appropriate parameters.
 
-- Multi-thread bam merge to speed up from 6 hours to 3 hours.
+- Replaces `catSortBams` with parallel, two-level BAM merging, reducing wall time from ~6 hours to ~3 hours.
 
 Because Bianca does not allow outbound internet access, this configuration also handles steps that would otherwise attempt online downloads (e.g. snpEff annotations), by pointing the workflow to a local preinstalled snpEff database.
 
@@ -191,6 +191,8 @@ modules\local\wf-human-snp.nf
    ```
 
 ## 4. Multi-thread bam merge
+
+Sort each BAM (sortEach), merge in parallel batches of 50 (mergeChunk), then perform a single final merge (mergeChunksFinalSingle).
 
 lib/ingress.nf
    ```groovy
