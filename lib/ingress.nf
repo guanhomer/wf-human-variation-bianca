@@ -420,12 +420,30 @@ def xam_ingress(Map arguments)
     }
 
     // now handle samples with too many files for `samtools merge`
-    ch_catsorted = ch_result.to_catsort
-    | catSortBams
-    | map{
-        meta, bam, bai ->
-        [meta + [src_xam: null, src_xai: null], bam, bai]
-    }
+    //ch_catsorted = ch_result.to_catsort
+    //| catSortBams
+    //| map{
+    //    meta, bam, bai ->
+    //    [meta + [src_xam: null, src_xai: null], bam, bai]
+    //}
+
+    // Fast way to handle large number of samples with multi-thread `samtools merge`
+	def FIRST_LEVEL_BATCH = 50  // exactly 50 per chunk
+
+	ch_catsorted = ch_result.to_catsort 
+      | flatMap { meta, paths -> paths.collect { [meta, it] } }  
+	  | sortEach 
+	  | groupTuple()                                // (meta, [*.srt.bam])
+	  | flatMap { meta, bams ->                       // clean & chunk
+		  def xs = (bams ?: []).findAll { it != null }
+		  if (!xs) return []
+		  xs.collate(FIRST_LEVEL_BATCH).withIndex().collect { chunk, idx -> [meta, idx, chunk] }
+		} 
+	  | mergeChunk                                    // expects a non-empty List<Path>
+	  | map { meta, idx, bam -> [meta, bam] } 
+	  | groupTuple() 
+	  | mergeChunksFinalSingle 
+	  | map { meta, bam, bai -> [meta + [src_xam:null, src_xai:null], bam, bai] }
 
     // Validate the index of the input BAM.
     // If the input BAM index is invalid, regenerate it.
@@ -707,6 +725,74 @@ process catSortBams {
     """
 }
 
+// Prepare for multi-thread bam merge 
+process sortEach {
+  label "ingress"
+  label "wf_common"
+  cpus 4
+  memory "8 GB"
+  input:
+    tuple val(meta), path(bam)
+  output:
+    tuple val(meta), path("${bam.simpleName}.srt.bam")
+  script:
+  """
+  set -euo pipefail
+  samtools sort -@ ${task.cpus} "${bam}" -o "${bam.simpleName}.srt.bam"
+  """
+}
+
+// First level of merging bam in chunks of 50 files 
+process mergeChunk {
+  label "ingress"
+  label "wf_common"
+  cpus 5
+  memory "8 GB"
+
+  input:
+    tuple val(meta), val(idx), path(bams)     // <=50 sorted BAMs
+
+  output:
+    tuple val(meta), val(idx), path("chunk_${idx}.bam")
+
+  script:
+  def merge_threads = Math.max(1, task.cpus - 2)
+  """
+  set -euo pipefail
+  n=\$(printf "%s\n" ${bams} | wc -w)
+  if [ "\$n" -eq 1 ]; then
+    ln -s ${bams} "chunk_${idx}.bam"
+  else
+    : > bam.list
+    for f in ${bams}; do echo "\$f" >> bam.list; done
+    samtools merge -@ ${merge_threads} -f -b bam.list "chunk_${idx}.bam"
+  fi
+  """
+}
+
+// Second level of merge bam chuncks
+process mergeChunksFinalSingle {
+    label "ingress"
+    label "wf_common"
+    cpus 7
+    memory "8 GB"
+    time "3h"
+
+    // Expect all first-level chunk outputs for one sample
+    input:
+    tuple val(meta), path("input_bams/chunk_*.bam")
+
+    output:
+    tuple val(meta), path("reads.bam"), path("reads.bam.bai")
+
+    script:
+    def merge_threads = Math.max(1, task.cpus - 3)
+    """
+    samtools merge -@ ${merge_threads} -c \
+        -b <(find input_bams -name 'chunk_*.bam' | sort) \
+        --write-index -o reads.bam##idx##reads.bam.bai
+    """
+}
 
 process sortBam {
     label "ingress"
