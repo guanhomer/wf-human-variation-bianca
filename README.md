@@ -158,8 +158,6 @@ modules\local\wf-human-snp.nf
   }
   ```
 
----
-
 ## 3. Handle snpEff databases (Bianca has no internet)
 
 1. Load the in-house snpEff database module:
@@ -190,6 +188,54 @@ modules\local\wf-human-snp.nf
 
    ```bash
    snpEff ... -dataDir "$SNPEFF_DATA" -noDownload ...
+   ```
+
+## 4. Multi-thread bam merge
+
+lib/ingress.nf
+   ```groovy
+   // Fast way to handle large number of samples with multi-thread `samtools merge`
+     def FIRST_LEVEL_BATCH = 50  // exactly 50 per chunk
+   
+     ch_catsorted = ch_result.to_catsort 
+         | flatMap { meta, paths -> paths.collect { [meta, it] } }  
+       | sortEach 
+       | groupTuple()                                // (meta, [*.srt.bam])
+       | flatMap { meta, bams ->                       // clean & chunk
+         def xs = (bams ?: []).findAll { it != null }
+         if (!xs) return []
+         xs.collate(FIRST_LEVEL_BATCH).withIndex().collect { chunk, idx -> [meta, idx, chunk] }
+       } 
+       | mergeChunk                                    // expects a non-empty List<Path>
+       | map { meta, idx, bam -> [meta, bam] } 
+       | groupTuple() 
+       | mergeChunksFinalSingle 
+       | map { meta, bam, bai -> [meta + [src_xam:null, src_xai:null], bam, bai] }
+
+   // Prepare for multi-thread bam merge 
+   process sortEach {
+     ...
+     samtools sort -@ ${task.cpus} "${bam}" -o "${bam.simpleName}.srt.bam"
+     ...
+   }
+   
+   // First level of merging bam in chunks of 50 files 
+   process mergeChunk {
+     ...
+    : > bam.list
+    for f in ${bams}; do echo "\$f" >> bam.list; done
+    samtools merge -@ ${merge_threads} -f -b bam.list "chunk_${idx}.bam"
+     ...
+   }
+   
+   // Second level of merge bam chuncks
+   process mergeChunksFinalSingle {
+       ...
+       samtools merge -@ ${merge_threads} -c \
+           -b <(find input_bams -name 'chunk_*.bam' | sort) \
+           --write-index -o reads.bam##idx##reads.bam.bai
+       ...
+   }
    ```
 
 ## Notes
