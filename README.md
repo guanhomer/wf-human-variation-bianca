@@ -192,7 +192,7 @@ modules\local\wf-human-snp.nf
 
 ## 4. Multi-thread bam merge
 
-Sort each BAM (sortEach), merge in parallel batches of 50 (mergeChunk), then perform a single final merge (mergeChunksFinalSingle).
+Sort each BAM (`sortEach`), merge in parallel batches of 50 (`mergeChunk`), then perform a single final merge (`mergeChunksFinalSingle`).
 
 lib/ingress.nf
    ```groovy
