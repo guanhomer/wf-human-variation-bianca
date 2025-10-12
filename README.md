@@ -59,14 +59,28 @@ We can run the `download_singularity_images.sh` script on Transit to download th
 ⚠️ Note: This disables the resume feature. Comment out this section when running tests.
 
   ```groovy
-   plugins {
-     id 'nf-boost@0.6.0'
-   }
-
-   boost {
-     cleanup = 'v2'
+   params.enable_boost   = false
+   params.boost_cleanup  = 'v2'
+   
+   // Only load plugin when requested
+   if (params.enable_boost as boolean) {
+     plugins {
+       id 'nf-boost@0.6.0'
+     }
+     boost {
+       cleanup = params.boost_cleanup
+     }
    }
   ```
+
+   Toggle cleanup boost in nextflow run.
+
+  ```groovy
+   nextflow run ... --enable_boost true
+
+   nextflow run ... --enable_boost false
+  ```
+
 
 ## 2. Tune resources per process
 
