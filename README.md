@@ -73,15 +73,6 @@ We can run the `download_singularity_images.sh` script on Transit to download th
    }
   ```
 
-   Toggle cleanup boost in nextflow run.
-
-  ```groovy
-   nextflow run ... --enable_boost true
-
-   nextflow run ... --enable_boost false
-  ```
-
-
 ## 2. Tune resources per process
 
 - Adjust `cpus`, `memory`, and `time` in `uppmax.config` or `modules/local/common.nf`.  
@@ -237,6 +228,7 @@ Adjust the input arguments based on your project:
 
 `-resume` : reuse results from previous runs when possible.
 
+`--enable_boost` : default false. true to enable cleanup boost. 
 
 
 
