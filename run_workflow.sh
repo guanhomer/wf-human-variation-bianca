@@ -29,7 +29,8 @@ nextflow run $WORKFLOW_DIR \
  --threads 4 \
  --override_basecaller_cfg 'dna_r10.4.1_e8.2_400bps_sup@v5.2.0' \
  -c $CUSTOM_CONFIG \
- --project sens2024549
+ --project sens2024549 \
+ --enable_boost true
 # -resume # disable as cleanup is enabled in config file
 
 # Clean up
