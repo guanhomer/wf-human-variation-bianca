@@ -10,6 +10,8 @@ It includes:
 
 - An example script `run_workflow.sh` for launching the workflow with appropriate parameters.
 
+- Multi-thread bam merge to speed up from 6 hours to 3 hours.
+
 Because Bianca does not allow outbound internet access, this configuration also handles steps that would otherwise attempt online downloads (e.g. snpEff annotations), by pointing the workflow to a local preinstalled snpEff database.
 
 ---
