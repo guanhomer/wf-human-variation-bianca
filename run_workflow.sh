@@ -14,6 +14,27 @@ REF=/proj/sens2024549/reference/GRCh38.p14.genome.fa
 BAM=/proj/sens2024549/nobackup/human-variation-workflow/20250919_BT-65_FF/bam/
 SAMPLE_NAME=BT-65_FF
 
+# Optional: ensure SNPEFF_DATA is set externally
+: "${SNPEFF_DATA:?SNPEFF_DATA must be set}"
+
+# Move 0 byte bam files to bam/zero_byte_bam/
+# Collect zero-byte BAMs (handles spaces/newlines)
+zero_bams=()
+while IFS= read -r -d '' f; do
+  zero_bams+=("$f")
+done < <(find "$BAM" -type f -name '*.bam' -size 0c -print0 2>/dev/null)
+
+if (( ${#zero_bams[@]} > 0 )); then
+  echo "Found ${#zero_bams[@]} zero-byte BAM file(s) in $BAM"
+  dest="$BAM/zero_byte_bam"
+  mkdir -p -- "$dest"
+  
+  for f in "${zero_bams[@]}"; do
+    echo "Moving: $f -> $dest"
+    mv -- "$f" "$dest" || { echo "Failed to move: $f" >&2; }
+  done
+fi
+
 nextflow run $WORKFLOW_DIR \
  --bam $BAM \
  --ref $REF \
