@@ -35,24 +35,37 @@ if (( ${#zero_bams[@]} > 0 )); then
   done
 fi
 
-nextflow run $WORKFLOW_DIR \
- --bam $BAM \
- --ref $REF \
- --sample_name "$SAMPLE_NAME" \
- --snp \
- --sv \
- --cnv \
- --mod \
- --str \
- --phased \
- --snpeff_data $SNPEFF_DATA \
- -profile singularity \
- --threads 4 \
- --override_basecaller_cfg 'dna_r10.4.1_e8.2_400bps_sup@v5.2.0' \
- -c $CUSTOM_CONFIG \
- --project sens2024549 \
- --enable_boost true
-# -resume # disable as cleanup is enabled in config file
+# Run workflow
+cmd="nextflow run $WORKFLOW_DIR"
+cmd+=" --bam $BAM"
+cmd+=" --ref $REF"
+cmd+=" --sample_name $SAMPLE_NAME"
+cmd+=" --snp"
+cmd+=" --sv"
+cmd+=" --cnv"
+cmd+=" --mod"
+cmd+=" --str"
+cmd+=" --phased"
+cmd+=" --snpeff_data $SNPEFF_DATA"
+cmd+=" --bam_min_coverage 0"
+cmd+=" -profile singularity"
+cmd+=" --threads 4"
+
+# Toggle one of these two lines by commenting/uncommenting:
+cmd+=" --override_basecaller_cfg 'dna_r10.4.1_e8.2_400bps_sup@v5.2.0'"
+# cmd+=" --override_basecaller_cfg 'dna_r10.4.1_e8.2_400bps_hac@v4.2.0'"
+
+cmd+=" -c $CUSTOM_CONFIG"
+cmd+=" --project sens2024549"
+cmd+=" --enable_boost true"
+# cmd+=" -resume" # disable as cleanup is enabled in config file
+
+# Print for debug
+echo "Running command:"
+echo "$cmd"
+
+# Execute
+eval "$cmd"
 
 # Clean up
 if ls output/*.wf-human-alignment-report.html 1>/dev/null 2>&1 && \
