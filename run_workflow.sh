@@ -1,5 +1,6 @@
-module load bioinfo-tools Nextflow snpEff_data/5.1
+module load bioinfo-tools Nextflow snpEff_data/5.1 samtools
 
+export NXF_VER=25.04.8
 export NXF_HOME=/castor/project/proj_nobackup/tools/nextflow/.nextflow
 export NXF_SINGULARITY_CACHEDIR=/proj/nobackup/sens2024549/human-variation-workflow/epi2me-labs/singularity/
 export NXF_OFFLINE='true'
@@ -7,6 +8,7 @@ export NXF_OPTS='-Xms1g -Xmx4g'
 
 WORKFLOW_DIR=/proj/nobackup/sens2024549/human-variation-workflow/epi2me-labs/wf-human-variation
 CUSTOM_CONFIG=$WORKFLOW_DIR/uppmax.config
+detect_basecaller_tool=/proj/nobackup/sens2024549/human-variation-workflow/script/detect_basecaller.sh
 
 REF=/proj/sens2024549/reference/GRCh38.p14.genome.fa
 # export BED=${DATA}demo.bed
@@ -35,6 +37,14 @@ if (( ${#zero_bams[@]} > 0 )); then
   done
 fi
 
+# Capture model or fail fast with script's non-zero exit
+BASECALLER_CFG="$(bash -- "$detect_basecaller_tool" "$BAM" || true)"
+if [[ -z "${BASECALLER_CFG//[[:space:]]/}" ]]; then
+  echo "error: failed to detect basecaller model" >&2
+  exit 1
+fi
+echo "Detected basecaller model: $BASECALLER_CFG"
+
 # Run workflow
 cmd="nextflow run $WORKFLOW_DIR"
 cmd+=" --bam $BAM"
@@ -52,8 +62,9 @@ cmd+=" -profile singularity"
 cmd+=" --threads 4"
 
 # Toggle one of these two lines by commenting/uncommenting:
-cmd+=" --override_basecaller_cfg 'dna_r10.4.1_e8.2_400bps_sup@v5.2.0'"
+# cmd+=" --override_basecaller_cfg 'dna_r10.4.1_e8.2_400bps_sup@v5.2.0'"
 # cmd+=" --override_basecaller_cfg 'dna_r10.4.1_e8.2_400bps_hac@v4.2.0'"
+cmd+=" --override_basecaller_cfg '$BASECALLER_CFG'"
 
 cmd+=" -c $CUSTOM_CONFIG"
 cmd+=" --project sens2024549"
